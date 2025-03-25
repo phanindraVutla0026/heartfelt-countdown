@@ -6,7 +6,7 @@ import HiddenGift from '@/components/HiddenGift';
 
 const Index = () => {
   const [isCountdownComplete, setIsCountdownComplete] = useState(false);
-  const birthdayDate = new Date('March 26, 2025 00:00:00');
+  const birthdayDate = new Date('March 29, 2025 00:00:00');
   
   // Check if we're currently on Deekshitha's birthday (for testing)
   useEffect(() => {
