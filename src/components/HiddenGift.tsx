@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { createStarryNight } from '@/utils/animations';
+import { Button } from '@/components/ui/button';
 
 interface HiddenGiftProps {
   isCountdownComplete: boolean;
@@ -31,11 +32,15 @@ const HiddenGift: React.FC<HiddenGiftProps> = ({ isCountdownComplete }) => {
   if (!isRevealed) {
     return (
       <div 
-        className={`secret-button fixed bottom-8 right-8 md:bottom-10 md:right-10 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-theme-red bg-opacity-10 cursor-pointer transition-all duration-300 hover:bg-opacity-30 ${isCountdownComplete ? 'opacity-40 hover:opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed bottom-8 right-8 md:bottom-10 md:right-10 z-20 transition-all duration-500 ${isCountdownComplete ? 'opacity-70 hover:opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={handleReveal}
       >
-        <span className="text-theme-white text-base md:text-lg">✨</span>
-        <span className="absolute -bottom-6 text-xs text-theme-white opacity-70">tap me</span>
+        <div className="relative flex flex-col items-center group cursor-pointer">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-theme-red bg-opacity-20 hover:bg-opacity-40 flex items-center justify-center transition-all duration-300 animate-pulse">
+            <span className="text-theme-white text-xl md:text-2xl">❤️</span>
+          </div>
+          <span className="absolute -bottom-6 text-xs text-theme-white opacity-80 group-hover:opacity-100 transition-opacity duration-300">tap me</span>
+        </div>
       </div>
     );
   }
@@ -65,12 +70,13 @@ const HiddenGift: React.FC<HiddenGiftProps> = ({ isCountdownComplete }) => {
             ✨ For someone as rare as a falling star, may your wishes always come true. ✨
           </p>
           
-          <button 
-            className="mt-8 px-6 py-2 bg-transparent border border-theme-white text-theme-white rounded-full text-sm hover:bg-theme-white hover:text-theme-black transition-all duration-300 z-10"
+          <Button 
+            className="mt-8 px-6 py-2 bg-transparent border border-theme-white text-theme-white rounded-full hover:bg-theme-white hover:text-theme-black transition-all duration-300 z-10"
             onClick={() => setIsRevealed(false)}
+            variant="outline"
           >
             Close
-          </button>
+          </Button>
         </div>
       )}
     </div>
