@@ -1,16 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import CountdownTimer from '@/components/CountdownTimer';
-import Celebration from '@/components/Celebration';
-import HiddenGift from '@/components/HiddenGift';
+import BirthdayCelebration from '@/components/BirthdayCelebration';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Gift, Heart } from 'lucide-react';
-import HiddenGiftPopup from '@/components/HiddenGiftPopup';
+import { Heart } from 'lucide-react';
 
 const Index = () => {
   const [isCountdownComplete, setIsCountdownComplete] = useState(false);
-  const [isGiftDialogOpen, setIsGiftDialogOpen] = useState(false);
   const birthdayDate = new Date('March 29, 2025 00:00:00');
   
   // Check if we're currently on Deekshitha's birthday (for testing)
@@ -52,27 +48,20 @@ const Index = () => {
           />
         </div>
 
-        {/* Floating Gift Button */}
-        <Dialog open={isGiftDialogOpen} onOpenChange={setIsGiftDialogOpen}>
-          <DialogTrigger asChild>
-            <Button 
-              className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-30 rounded-full bg-theme-red/30 hover:bg-theme-red/60 border border-theme-red/50 transition-all duration-300 group ${isCountdownComplete ? 'animate-pulse' : 'opacity-0 pointer-events-none'}`}
-              size="icon"
-            >
-              <Heart className="h-6 w-6 text-theme-white group-hover:scale-110 transition-transform duration-300" />
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="p-0 border-none bg-transparent max-w-none w-full h-full">
-            <HiddenGiftPopup isCountdownComplete={isCountdownComplete} onClose={() => setIsGiftDialogOpen(false)} />
-          </DialogContent>
-        </Dialog>
+        {/* Floating Heart Button - Only visible when countdown is not complete */}
+        {!isCountdownComplete && (
+          <Button 
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 rounded-full bg-theme-red/30 hover:bg-theme-red/60 border border-theme-red/50 transition-all duration-300 group animate-pulse"
+            size="icon"
+            disabled
+          >
+            <Heart className="h-6 w-6 text-theme-white group-hover:scale-110 transition-transform duration-300" />
+          </Button>
+        )}
       </main>
       
-      {/* Celebration component (visible when countdown completes) */}
-      <Celebration isVisible={isCountdownComplete} />
-      
-      {/* Hidden Gift Button and Reveal */}
-      <HiddenGift isCountdownComplete={isCountdownComplete} />
+      {/* Combined celebration and hidden gift component */}
+      <BirthdayCelebration isVisible={isCountdownComplete} />
     </div>
   );
 };
