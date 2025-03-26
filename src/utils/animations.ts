@@ -14,10 +14,10 @@ export const createFollowElement = (
   
   if (type === 'heart') {
     element.innerHTML = '❤️';
-    element.style.fontSize = `${Math.random() * 10 + 10}px`;
+    element.style.fontSize = `${Math.random() * 15 + 10}px`;
   } else {
     element.innerHTML = '✨';
-    element.style.fontSize = `${Math.random() * 8 + 8}px`;
+    element.style.fontSize = `${Math.random() * 15 + 8}px`;
   }
 
   // Get position for the element
@@ -43,7 +43,7 @@ export const createFollowElement = (
   document.body.appendChild(element);
   
   // Add randomness to animation
-  const randomX = (Math.random() - 0.5) * 100;
+  const randomX = (Math.random() - 0.2) * 100;
   element.animate(
     [
       { transform: `translate(0, 0) rotate(0deg)`, opacity: 0.8 },

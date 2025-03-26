@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState, useRef } from 'react';
-import { createConfetti, playMusic, createStarryNight } from '@/utils/animations';
+import { createConfetti, createStarryNight } from '@/utils/animations';
 import { Button } from '@/components/ui/button';
 
 interface BirthdayCelebrationProps {
@@ -24,35 +23,9 @@ const BirthdayCelebration: React.FC<BirthdayCelebrationProps> = ({ isVisible }) 
 
   // Initialize and handle the celebration sequence
   useEffect(() => {
-    if (isVisible) {
+    if (isVisible ) {
       // Launch confetti
       createConfetti();
-      
-      // Play music
-      const playBirthdayMusic = async () => {
-        try {
-          const audio = new Audio("/birthday-music.mp3");
-          audio.volume = 0.5;
-          await audio.play();
-          audioRef.current = audio;
-          
-          // Fade out music after 60 seconds
-          setTimeout(() => {
-            const fadeOut = setInterval(() => {
-              if (audio.volume > 0.1) {
-                audio.volume -= 0.05;
-              } else {
-                audio.pause();
-                clearInterval(fadeOut);
-              }
-            }, 500);
-          }, 60000);
-        } catch (error) {
-          console.error("Failed to play music:", error);
-        }
-      };
-      
-      playBirthdayMusic();
       
       // Show celebration messages one by one
       const messageTimer = setInterval(() => {
@@ -86,7 +59,34 @@ const BirthdayCelebration: React.FC<BirthdayCelebrationProps> = ({ isVisible }) 
   // Handle the gift reveal phases
   const handleRevealGift = () => {
     setGiftPhase(1);
-    setTimeout(() => setGiftPhase(2), 3000);
+
+    // Play music when the gift is revealed
+    const playBirthdayMusic = async () => {
+      try {
+        const audio = new Audio("/hi_nanna.mp3");
+        audio.volume = 0.5;
+        await audio.play();
+        audioRef.current = audio;
+
+        // Fade out music after 60 seconds
+        setTimeout(() => {
+          const fadeOut = setInterval(() => {
+            if (audio.volume > 0.1) {
+              audio.volume -= 0.05;
+            } else {
+              audio.pause();
+              clearInterval(fadeOut);
+            }
+          }, 500);
+        }, 20000);
+      } catch (error) {
+        console.error("Failed to play music:", error);
+      }
+    };
+
+    playBirthdayMusic();
+
+    setTimeout(() => setGiftPhase(2), 5000);
   };
 
   if (!isVisible) return null;
@@ -102,7 +102,7 @@ const BirthdayCelebration: React.FC<BirthdayCelebrationProps> = ({ isVisible }) 
               key={index}
               className={`celebration-text font-serif text-2xl md:text-4xl text-theme-white mb-8 text-center max-w-lg px-4 ${messageIndex >= index ? 'visible' : ''}`}
               style={{ 
-                transitionDelay: `${index * 0.5}s`,
+                transitionDelay: `${index * 0.2}s`,
                 opacity: messageIndex >= index ? 1 : 0,
                 transform: messageIndex >= index ? 'translateY(0)' : 'translateY(20px)'
               }}
@@ -114,7 +114,7 @@ const BirthdayCelebration: React.FC<BirthdayCelebrationProps> = ({ isVisible }) 
           {/* Gift Button that appears after celebration messages */}
           {showGift && giftPhase === 0 && (
             <Button 
-              className="mt-12 px-6 py-4 bg-transparent border border-theme-white text-theme-white rounded-full hover:bg-theme-white hover:text-theme-black transition-all duration-300 animate-pulse"
+              className="mt-12 px-6 py-4 bg-transparent border border-theme-white text-theme-white rounded-full hover:bg-theme-white hover:text-theme-black transition-all duration-3000 animate-pulse"
               onClick={handleRevealGift}
               variant="outline"
               size="lg"
@@ -146,7 +146,13 @@ const BirthdayCelebration: React.FC<BirthdayCelebrationProps> = ({ isVisible }) 
           
           <Button 
             className="mt-8 px-6 py-2 bg-transparent border border-theme-white text-theme-white rounded-full hover:bg-theme-white hover:text-theme-black transition-all duration-300 z-10"
-            onClick={() => setGiftPhase(0)}
+            onClick={() => {
+              setGiftPhase(0);
+              if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0; // Reset playback position
+              }
+            }}
             variant="outline"
           >
             Return to Celebration
